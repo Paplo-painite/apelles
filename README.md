@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/Paplo-painite/apelles">
-    <img alt="Apelles Android" src="https://raw.githubusercontent.com/Paplo-painite/apelles/main/assets/app-icon/hicolor/512x512/apps/ai.storyteller.apelles.png" width="128" />
+    <img alt="Apelles Android" src="https://raw.githubusercontent.com/Paplo-painite/apelles/main/docs/images/new_icon.png" width="128" />
   </a>
 </p>
 
