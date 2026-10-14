@@ -152,6 +152,16 @@ If you are working on a feature or bug fix, try to keep the change scoped and te
 - Discord: https://discord.gg/artcraft
 - App page: https://getartcraft.com/apps/apelles
 
+## Development assistance
+
+This Android port and its release preparation were developed by **Paplo-painite** with
+development assistance from [Manus AI](https://manus.im). Manus AI helped with Android
+integration, offline-first workflows, Arabic/RTL support, documentation, testing, and release
+packaging. The project remains community-owned and open source, and all contributions are welcome.
+
+If you would like to use the AI development assistant that helped with this project, visit
+[Manus AI](https://manus.im).
+
 ## License
 
 Apelles is dual-licensed under the MIT and Apache-2.0 licenses.
