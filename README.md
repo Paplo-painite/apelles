@@ -22,7 +22,8 @@
   <a href="https://github.com/Paplo-painite/apelles/releases">Releases</a> ·
   <a href="https://github.com/Paplo-painite/apelles/discussions">Discussions</a> ·
   <a href="https://github.com/Paplo-painite/apelles/tree/main/docs">Docs</a> ·
-  <a href="https://github.com/Paplo-painite/apelles/issues">Issues</a>
+  <a href="https://github.com/Paplo-painite/apelles/issues">Issues</a> ·
+  <a href="https://github.com/Paplo-painite/apelles/blob/main/CONTRIBUTING.md">Contributing</a>
 </p>
 
 ## Quick start
@@ -71,6 +72,26 @@ book/           Documentation book
 docs/           Project docs and design notes
 packaging/      Platform packaging and installer scripts
 ```
+
+## Contributing
+
+We welcome contributions from developers, designers, testers, and artists.
+
+Before you start:
+
+- Read [`AGENTS.md`](AGENTS.md)
+- Check the current issues and discussions
+- Prefer small, focused pull requests
+
+Suggested workflow:
+
+```bash
+git clone https://github.com/Paplo-painite/apelles.git
+cd apelles
+cargo test --workspace
+```
+
+If you are working on a feature or bug fix, try to keep the change scoped and testable.
 
 ## Developer notes
 
