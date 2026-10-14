@@ -49,11 +49,23 @@ available.
 
 ## Android status
 
-**Android pre-release — suitable for testing.** Apelles is a native Android application, not a
-WebView. The current build includes the Android shell, Storage Access Framework file selection,
-project save/export, autosave and recovery, touch-oriented scaling, Arabic/RTL text support, and
-imported font support. Some advanced editing workflows and device-specific GPU behavior remain
-under active development.
+> **Apelles Android is an early, ambitious pre-release — ready for exploration, testing, and
+> collaboration, but not yet a fully stable production application.**
+
+Apelles is being built as a native Android application, not a WebView. The current build already
+brings together a Rust-powered editing engine, layered workflows, Android Storage Access Framework
+file selection, project save/export, autosave and recovery, touch-oriented scaling, Arabic/RTL text
+support, and imported font support. These foundations are an exciting starting point, while device
+compatibility, performance, advanced editing workflows, and long-session reliability continue to
+improve.
+
+### Help build the next version
+
+Apelles needs Android developers, Rust developers, UI/UX designers, testers, Arabic typography
+specialists, and creative users who can try real workflows and report what works well and what
+needs attention. Your feedback and contributions can help turn this promising first Android build
+into a dependable everyday image editor. Please use the issue templates when reporting Android,
+Arabic/RTL, or feature-specific feedback.
 
 ## What Apelles includes
 
