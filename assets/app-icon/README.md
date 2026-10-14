@@ -22,9 +22,11 @@ each side so the figure reads at 16–48 px.
 
 ## Provenance
 
-The owner's original drawing, made in ArtCraft (2880 px, engraving style, keyed to the palette),
-vectorised with craftrules `assets/logo-options/_tools/vectorize_tile.py`. The source PNG stays in
-craftrules at `assets/app-icons/apelles/source.png`. License: see `LICENSE.txt`.
+This icon is a modified derivative of the PhotoCraft project icon: the fox artwork was cropped
+from the original licensed artwork and placed on a red background for the Android adaptive icon.
+The original PhotoCraft icon is licensed under MIT or Apache-2.0; see `LICENSE.txt` for the
+redistribution notice. The Apelles-specific crop, layout and background changes are released
+under the same project license.
 
 ## Files
 
