@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Overrides for the setup wizard's WixUI strings, so its pages name the version being installed
+  ([ApellesVersion] is the full version, pre-release tag included, set in apelles.wxs).
+-->
+<WixLocalization Culture="en-US" xmlns="http://wixtoolset.org/schemas/v4/wxl">
+  <String Id="WelcomeDlgTitle" Value="{\WixUI_Font_Bigger}Welcome to the [ProductName] [ApellesVersion] Setup Wizard" />
+  <String Id="WelcomeDlgDescription" Value="The Setup Wizard will install [ProductName] version [ApellesVersion] on your computer. Click Next to continue or Cancel to exit the Setup Wizard." />
+  <String Id="VerifyReadyDlgInstallTitle" Value="{\WixUI_Font_Title}Ready to install [ProductName] [ApellesVersion]" />
+  <String Id="ExitDialogTitle" Value="{\WixUI_Font_Bigger}Completed the [ProductName] [ApellesVersion] Setup Wizard" />
+</WixLocalization>

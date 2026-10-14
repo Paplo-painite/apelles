@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#262626">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link data-trunk rel="copy-file" href="manifest.webmanifest">
+  <link data-trunk rel="copy-file" href="sw.js">
+  <link rel="icon" type="image/png" sizes="128x128" href="./apelles-icon.png">
+  <link rel="apple-touch-icon" sizes="128x128" href="./apelles-icon.png">
+  <link data-trunk rel="copy-file" href="apelles-icon.png">
+  <title>Apelles</title>
+  <link data-trunk rel="rust" data-bin="apelles-web" data-cargo-profile="wasm-release" data-cargo-features="heif" data-wasm-opt="z" data-weak-refs />
+  <style>
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #262626; }
+    #apelles_canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    #apelles_loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 0 16px; text-align: center; color: #b8b8b8; font: 14px system-ui, sans-serif; pointer-events: none; }
+    #apelles_loading p { margin: 0 0 8px; max-width: 420px; line-height: 1.5; }
+    #apelles_loading a { color: #e0e0e0; pointer-events: auto; }
+    /* The app removes this element once it runs. If the WebAssembly never downloads or doesn't match
+       this page, no Rust runs to say so, so the page itself shows what to do after a while. */
+    #apelles_stalled { color: #8c8c8c; visibility: hidden; animation: apelles-stalled 0s 20s forwards; }
+    @keyframes apelles-stalled { to { visibility: visible; } }
+  </style>
+</head>
+<body>
+  <canvas id="apelles_canvas"></canvas>
+  <div id="apelles_loading">
+    <p>Loading Apelles&hellip;</p>
+    <p id="apelles_stalled">This is taking longer than usual. If Apelles doesn't start, its files may have failed to
+      download or come from a different version of this page. <a href="">Reload</a> to try again; the browser
+      console lists what failed.</p>
+  </div>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(() => {});
+    }
+  </script>
+</body>
+</html>

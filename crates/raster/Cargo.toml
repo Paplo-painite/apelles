@@ -1,0 +1,16 @@
+[package]
+name = "apelles-raster"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+apelles-geom = { workspace = true }
+apelles-color = { workspace = true }
+serde = { workspace = true }
+
+[dev-dependencies]
+proptest = { workspace = true }

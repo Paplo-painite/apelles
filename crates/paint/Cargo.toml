@@ -1,0 +1,17 @@
+[package]
+name = "apelles-paint"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+apelles-geom = { workspace = true }
+apelles-color = { workspace = true }
+apelles-raster = { workspace = true }
+serde = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }

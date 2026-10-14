@@ -1,0 +1,19 @@
+[package]
+name = "apelles-vector"
+description = "Vector paths, shape layers, strokes and vector masks → anti-aliased coverage and surfaces"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+apelles-geom = { workspace = true }
+apelles-color = { workspace = true }
+apelles-raster = { workspace = true }
+apelles-doc = { workspace = true }
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+rayon = { workspace = true }

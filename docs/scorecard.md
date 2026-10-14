@@ -1,0 +1,2 @@
+
+Android Phase 2 status (source change, 2026-10-13): autosave now ticks every 30 seconds for dirty documents only; recovery writes use atomic file replacement, a separate `<key>.project.json`, a crash Journal marker, and three dated snapshot generations. The existing History dock already lists past/current/redo states and jumps through Undo/Redo when a row is clicked. Unit coverage was added for three-generation retention. Physical power-loss, Android lifecycle, and persisted full Undo-state validation remain device-dependent/open.

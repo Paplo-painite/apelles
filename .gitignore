@@ -1,0 +1,18 @@
+*~
+plan/
+/target
+target/
+/dist
+/corpus
+/log
+/secrets
+/temp
+/book/output
+/craft-fonts
+*.log
+__pycache__/
+
+# Android/Gradle build output
+packaging/android/.gradle/
+packaging/android/app/build/
+packaging/android/local.properties

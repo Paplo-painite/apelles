@@ -1,0 +1,39 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'ai.storyteller.apelles.nativeandroid'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'ai.storyteller.apelles.nativeandroid'
+        minSdk 26
+        targetSdk 35
+        versionCode 5
+        versionName '0.6.0-Apelles-android5'
+        ndk { abiFilters 'arm64-v8a', 'x86_64' }
+    }
+
+    // Release signing is opt-in and reads credentials from the environment/CI secrets.
+    // No keystore path or password is committed to the repository.
+    signingConfigs {
+        release {
+            def storeFilePath = System.getenv('APELLES_KEYSTORE')
+            if (storeFilePath) {
+                storeFile file(storeFilePath)
+                storePassword System.getenv('APELLES_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('APELLES_KEY_ALIAS')
+                keyPassword System.getenv('APELLES_KEY_PASSWORD')
+            }
+        }
+    }
+    buildTypes {
+        release {
+            def storeFilePath = System.getenv('APELLES_KEYSTORE')
+            if (storeFilePath) signingConfig signingConfigs.release
+            minifyEnabled false
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core:1.13.1'
+}

@@ -1,0 +1,32 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application
+        android:icon="@mipmap/apelles_fox_icon"
+        android:roundIcon="@mipmap/apelles_fox_icon"
+        android:theme="@style/AppTheme"
+        android:label="Apelles"
+        android:hardwareAccelerated="true"
+        android:allowBackup="false"
+        android:supportsRtl="true">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="fullSensor"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            android:configChanges="orientation|screenSize|keyboardHidden">
+            <meta-data android:name="android.app.lib_name" android:value="apelles_android" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/apelles_file_paths" />
+        </provider>
+    </application>
+</manifest>

@@ -1,0 +1,43 @@
+[package]
+name = "apelles-engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[features]
+# Real-file corpus tests (opt-in; `cargo xtask test-corpus`). Fail when the corpus is missing.
+corpus = []
+
+[dependencies]
+apelles-geom = { workspace = true }
+apelles-color = { workspace = true }
+apelles-cms = { workspace = true }
+apelles-raster = { workspace = true }
+apelles-doc = { workspace = true }
+apelles-ops = { workspace = true }
+apelles-compose = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+rayon = { workspace = true }
+apelles-paint = { workspace = true }
+apelles-algo = { workspace = true }
+apelles-text = { workspace = true }
+apelles-vector = { workspace = true }
+apelles-io = { workspace = true }
+apelles-psd = { workspace = true }
+apelles-format = { workspace = true }
+apelles-plugins = { workspace = true }
+blake3 = { version = "1.8", default-features = false, features = ["pure"] }
+apelles-codecs = { workspace = true }
+flate2 = { workspace = true }
+
+[dev-dependencies]
+apelles-affinity = { workspace = true, features = ["synth"] }
+# Synthetic camera raw files for the open tests.
+apelles-raw = { workspace = true, features = ["testgen"] }
+# WebAssembly text -> binary for plug-in test modules (Apache-2.0 WITH LLVM-exception).
+wat = "1.228"

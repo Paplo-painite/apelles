@@ -1,0 +1,34 @@
+[package]
+name = "apelles-android"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+description = "Apelles native Android shell — Apelles open-source edition"
+
+[lints.rust]
+unsafe_code = "allow"
+
+[lints.clippy]
+dbg_macro = "warn"
+todo = "warn"
+
+[target.'cfg(target_os = "android")'.dependencies]
+android-activity = { version = "0.6.1", features = ["native-activity"] }
+jni = "0.22"
+eframe = { workspace = true, default-features = false, features = ["android-native-activity", "default_fonts", "wgpu", "persistence"] }
+egui = { workspace = true }
+apelles-engine = { workspace = true }
+apelles-ui-egui = { workspace = true }
+apelles-doc = { workspace = true }
+apelles-format = { workspace = true }
+apelles-io = { workspace = true }
+log = { workspace = true }
+
+[target.'cfg(not(target_os = "android"))'.dependencies]
+eframe = { workspace = true, default-features = false, features = ["default_fonts", "wgpu"] }
+
+[lib]
+name = "apelles_android"
+path = "src/lib.rs"
+crate-type = ["cdylib"]
