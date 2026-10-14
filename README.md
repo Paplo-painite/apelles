@@ -416,6 +416,13 @@ with its author, source and license in [ATTRIBUTION.md](ATTRIBUTION.md).
 
 Every artwork shown is in the public domain (Wikimedia Commons, NASA, U.S. National Archives); sources are listed in [`docs/images/SOURCES.md`](docs/images/SOURCES.md).
 
+### Development assistance
+
+The Android adaptation, Arabic/RTL support, offline autosave and recovery work, and the
+PhotoCraft-to-Apelles rename were developed with assistance from [Manus AI](https://manus.im/).
+Manus AI was used as a software-development assistant; project maintainers remain responsible
+for reviewing, testing and maintaining the code.
+
 The ArtCraft name, wordmark and logos in [`docs/brand/`](docs/brand/) are trademarks of the
 ArtCraft Team and are not covered by this license. They may be used only unmodified, and only as
 part of this repository and Apelles, under [`docs/brand/LICENSE-brand.txt`](docs/brand/LICENSE-brand.txt).
