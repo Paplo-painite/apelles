@@ -32,6 +32,17 @@
   <a href="https://getartcraft.com/apps">All Crafting Apps</a>
 </p>
 
+## Download Apelles for Android
+
+Download the latest signed Android testing build from the
+[Apelles Android v0.6.0 release](https://github.com/Paplo-painite/apelles/releases/tag/v0.6.0-apelles-android):
+
+- [Download APK](https://github.com/Paplo-painite/apelles/releases/download/v0.6.0-apelles-android/Apelles-Android-v0.6.0.apk)
+- [Download open-source archive](https://github.com/Paplo-painite/apelles/releases/download/v0.6.0-apelles-android/Apelles-Source-v0.6.0.zip)
+
+The APK supports `arm64-v8a` and `x86_64`. It is a **pre-release testing build**; enable
+installation from the relevant source on Android before installing it.
+
 <br>
 
 <p align="center">
