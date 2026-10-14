@@ -1,0 +1,28 @@
+name: Arabic or RTL text issue
+description: Report Arabic shaping, bidirectional text, or RTL layout behavior
+title: "RTL: "
+labels:
+  - arabic
+  - text
+body:
+  - type: textarea
+    id: sample
+    attributes:
+      label: Minimal text sample
+      description: Use a short sample without personal information.
+      placeholder: مرحبا بالعالم English 123
+    validations:
+      required: true
+  - type: input
+    id: font
+    attributes:
+      label: Font family and source
+      placeholder: Noto Kufi Arabic or imported font filename
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual rendering
+    validations:
+      required: true
