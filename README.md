@@ -55,6 +55,12 @@ available.
   <sub>Apelles Android — open-source image editing for Android.</sub>
 </p>
 
+<p align="center">
+  <img src="docs/images/apelles-editor-screen.png" alt="Apelles Android image editing interface" width="420">
+  <br>
+  <sub>Apelles Android editor interface with layers, tools, canvas controls, and export actions.</sub>
+</p>
+
 ## Android status
 
 > **Apelles Android is an early, ambitious pre-release — ready for exploration, testing, and
