@@ -2,18 +2,18 @@
 
 <p align="center">
   <a href="https://github.com/Paplo-painite/apelles">
-    <img alt="Apelles" src="https://raw.githubusercontent.com/Paplo-painite/apelles/main/assets/app-icon/hicolor/512x512/apps/ai.storyteller.apelles.png" width="128" />
+    <img alt="Apelles Android" src="https://raw.githubusercontent.com/Paplo-painite/apelles/main/assets/app-icon/hicolor/512x512/apps/ai.storyteller.apelles.png" width="128" />
   </a>
 </p>
 
 <p align="center">
   <strong>Image editing, rebuilt in pure Rust.</strong><br>
-  A clean-room, native reimplementation of core Photoshop workflows for desktop, Android web, and browser builds.
+  Apelles: A powerful mobile-first image editor for Android, built from scratch using Rust.
 </p>
 
 <p align="center">
   <img alt="Rust" src="https://img.shields.io/badge/Rust-100%25-orange?logo=rust&logoColor=white">
-  <img alt="Platform" src="https://img.shields.io/badge/macOS%20%7C%20Windows%20%7C%20Linux%20%7C%20FreeBSD%20%7C%20Web-native-blue">
+  <img alt="Platform" src="https://img.shields.io/badge/Platform-Android-brightgreen?logo=android&logoColor=white">
   <img alt="License" src="https://img.shields.io/badge/License-MIT%20OR%20Apache--2.0-lightgrey">
   <img alt="Status" src="https://img.shields.io/badge/Status-early%20alpha-yellow">
 </p>
@@ -37,9 +37,9 @@
 ## Download Apelles for Android
 
 <p align="center">
-  <img src="docs/images/apelles-demo.jpg" alt="Apelles on Android editing an ocean waves painting — mobile UI with top toolbar, document tabs, tool panels, and bottom action buttons" width="360">
+  <img src="docs/images/android_screenshot.jpg" alt="Apelles Android app editing an ocean waves painting" width="360">
   <br>
-  <sub>A screenshot of Apelles running on Android editing an ocean waves painting. The mobile UI shows a compact top toolbar with document tabs, left-side tool icons, right-side panels for color and layers, and bottom quick-action buttons (Undo, Brush, Eraser, Crop, Filters, Layers, Export).</sub>
+  <sub>Apelles running on Android with a mobile-first editing interface for painting, layers, tools, and export.</sub>
 </p>
 
 <p align="center">
@@ -75,13 +75,13 @@ Then serve the generated files from `dist/web/` over HTTPS and open them on Andr
 - Real PSD compatibility and layered document support
 - Adjustment layers, masks, type, vector shapes, and filters
 - Brush engine and live editing for common Photoshop-style operations
-- Native desktop app with browser/WebAssembly support
+- Native Android app with a mobile-first interface
 - Clean-room engine built in Rust
 
 ## Repository layout
 
 ```text
-apps/           Desktop, CLI, web, and Android-related app targets
+apps/           Android app and supporting web/PWA targets
 crates/         Core Rust crates for image editing, PSD IO, text, rendering, and UI logic
 assets/         Icons, fonts, and bundled assets
 book/           Documentation book
