@@ -47,6 +47,14 @@ available.
   <sub>Brush settings, size and opacity controls, and an on-canvas preview inside the Android UI.</sub>
 </p>
 
+## Project showcase
+
+<p align="center">
+  <img src="docs/images/apelles-promo.png" alt="Apelles Android promotional poster" width="420">
+  <br>
+  <sub>Apelles Android — open-source image editing for Android.</sub>
+</p>
+
 ## Android status
 
 > **Apelles Android is an early, ambitious pre-release — ready for exploration, testing, and
