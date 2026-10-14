@@ -34,6 +34,22 @@
 - Web demo: <a href="https://getartcraft.com/apps/apelles">Open the app</a>
 - GitHub releases: <a href="https://github.com/Paplo-painite/apelles/releases">Latest builds</a>
 
+## Download Apelles for Android
+
+<p align="center">
+  <img src="docs/images/apelles-demo.jpg" alt="Apelles on Android editing an ocean waves painting — mobile UI with top toolbar, document tabs, tool panels, and bottom action buttons" width="360">
+  <br>
+  <sub>A screenshot of Apelles running on Android editing an ocean waves painting. The mobile UI shows a compact top toolbar with document tabs, left-side tool icons, right-side panels for color and layers, and bottom quick-action buttons (Undo, Brush, Eraser, Crop, Filters, Layers, Export).</sub>
+</p>
+
+<p align="center">
+  <img src="docs/images/apelles-brush-android.jpg" alt="Apelles Android brush tool — brush settings and on-canvas preview" width="360">
+  <br>
+  <sub>Brush tool on Android: the Brush settings panel, size/opacity controls and an on-canvas preview while painting, shown inside the mobile UI.</sub>
+</p>
+
+> The APK supports `arm64-v8a` and `x86_64`. It is a **pre-release testing build**; enable installation from the relevant source on Android before installing it.
+
 ### Build from source
 
 ```bash
