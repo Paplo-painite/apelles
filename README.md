@@ -7,8 +7,9 @@
 </p>
 
 <p align="center">
-  <strong>Image editing, rebuilt in pure Rust.</strong><br>
-  Apelles: a powerful mobile-first image editor for Android, built from scratch using Rust.
+  <b>An open-source, Photoshop-style image editor for Android. Early experimental release, under active development.</b><br>
+  Layers, masks, adjustment layers, layer styles, type, vectors, brushes and layered PSD files,<br>
+  in a native app written entirely in Rust. Open source, offline, and yours.
 </p>
 
 <p align="center">

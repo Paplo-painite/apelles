@@ -286,7 +286,11 @@ fn android_fit_scale(native: f32, physical: egui::Vec2) -> f32 {
     let long = physical.x.max(physical.y);
     let short = physical.x.min(physical.y);
     let fit = (long / 1280.0).min(short / 600.0);
-    native.min(fit).clamp(1.0, 3.0)
+    // A phone's physical resolution can suggest a very large desktop-like scale. That makes
+    // the side docks overlap the canvas and, more importantly, changes the visual scale while a
+    // touch event is being processed. Auto must remain conservative; users can still choose a
+    // larger fixed scale explicitly on tablets and desktop-sized Android devices.
+    native.min(fit).clamp(1.0, 1.25)
 }
 
 #[cfg(target_os = "android")]
@@ -309,6 +313,14 @@ fn sync_display_scale(app: &ApellesApp, ctx: &egui::Context) {
             prefs::UiScale::Auto => auto,
             fixed => fixed.name().parse::<f32>().map_or(auto, |pct| (pct / 100.0).clamp(1.0, 3.0)),
         };
+        // Do not change egui's coordinate transform on the same frame as a touch press/release.
+        // Android input coordinates were already converted using the previous scale, so changing
+        // it here would leave the painted widgets and their hit regions one frame apart.
+        let touch_transition = ctx.input(|i| i.pointer.any_pressed() || i.pointer.any_released() || i.pointer.any_down());
+        if touch_transition && (ctx.pixels_per_point() - scale).abs() > 0.001 {
+            ctx.request_repaint();
+            return;
+        }
         ctx.set_pixels_per_point(scale);
         // Keep controls finger-sized in physical pixels after the ppp change.
         let min_touch = 40.0 / scale;
@@ -2305,10 +2317,10 @@ mod tests {
 
     #[test]
     fn android_fit_scale_targets_a_desktop_sized_logical_viewport() {
-        assert!((android_fit_scale(3.0, vec2(2576.0, 1171.0)) - 1.9516667).abs() < 0.001);
-        assert!((android_fit_scale(3.0, vec2(1171.0, 2576.0)) - 1.9516667).abs() < 0.001, "portrait uses the same long/short fit");
+        assert_eq!(android_fit_scale(3.0, vec2(2576.0, 1171.0)), 1.25, "Auto stays conservative on Android");
+        assert_eq!(android_fit_scale(3.0, vec2(1171.0, 2576.0)), 1.25, "portrait uses the same conservative fit");
         assert_eq!(android_fit_scale(0.5, vec2(2576.0, 1171.0)), 1.0, "never make touch UI smaller than 1 ppp");
-        assert_eq!(android_fit_scale(4.0, vec2(10000.0, 8000.0)), 3.0, "cap extreme native DPI");
+        assert_eq!(android_fit_scale(4.0, vec2(10000.0, 8000.0)), 1.25, "cap extreme native DPI");
     }
 
     #[test]
