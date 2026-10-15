@@ -1,0 +1,7 @@
+Apelles Android is an open-source, native image editor for creating, editing, and exporting images on Android.
+
+It provides an offline-first workflow with layers, project support, file opening and export, autosave and recovery, imported fonts, touch-oriented controls, and initial Arabic and right-to-left text support.
+
+This is an early experimental pre-release. Some advanced editing workflows, device compatibility, and Arabic/RTL rendering are still being improved.
+
+The Android edition was prepared by Paplo-painite with development assistance from Manus AI and with inspiration from the open-source PhotoCraft/Apelles project.

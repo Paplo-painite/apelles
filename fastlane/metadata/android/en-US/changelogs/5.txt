@@ -1,0 +1,1 @@
+Initial Apelles Android pre-release with offline editing, layers, file access, autosave and recovery, imported fonts, and initial Arabic/RTL support.
