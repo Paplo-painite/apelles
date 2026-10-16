@@ -20,7 +20,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Paplo-painite/apelles/releases/tag/v0.1.2-apelles-android">Download APK</a> ·
+  <a href="https://github.com/Paplo-painite/apelles/releases/tag/v0.1.0-apelles-android">Download APK</a> ·
   <a href="https://github.com/Paplo-painite/apelles/discussions">Discussions</a> ·
   <a href="https://github.com/Paplo-painite/apelles/tree/main/docs">Docs</a> ·
   <a href="https://github.com/Paplo-painite/apelles/issues">Issues</a> ·
@@ -29,9 +29,9 @@
 
 ## Download Apelles for Android
 
-[Download Apelles Android v0.1.2](https://github.com/Paplo-painite/apelles/releases/download/v0.1.2-apelles-android/Apelles-Android-v0.1.2.apk)
+[Download Apelles Android v0.1.0](https://github.com/Paplo-painite/apelles/releases/download/v0.1.0-apelles-android/Apelles-Android-v0.1.0.apk)
 
-[View the official release notes](https://github.com/Paplo-painite/apelles/releases/tag/v0.1.2-apelles-android)
+[View the official release notes](https://github.com/Paplo-painite/apelles/releases/tag/v0.1.0-apelles-android)
 
 This is the **first public Android experimental release**. It is intended for testing and
 feedback, not production use. It supports `arm64-v8a` and `x86_64`; enable installation from the
