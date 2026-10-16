@@ -31,10 +31,10 @@
 
 [Download the latest APK from GitHub Releases](https://github.com/Paplo-painite/apelles/releases/latest)
 
-The current Android release is a **pre-release testing build**. It supports `arm64-v8a` and
-`x86_64`; enable installation from the relevant source on Android before installing it. Check the
-release notes for the supported Android version and verify the published SHA-256 digest when
-available.
+This is the **first public Android experimental release**. It is intended for testing and
+feedback, not production use. It supports `arm64-v8a` and `x86_64`; enable installation from the
+relevant source on Android before installing it. Check the release notes for the supported Android
+version and verify the published SHA-256 digest when available.
 
 <p align="center">
   <img src="docs/images/android_screenshot.jpg" alt="Apelles Android app editing an ocean waves painting" width="360">
@@ -84,14 +84,23 @@ Arabic/RTL, or feature-specific feedback.
 
 ## What Apelles includes
 
-- Layer-based editing workflows
-- Real PSD compatibility and layered document support
-- Adjustment layers, masks, type, vector shapes, and filters
-- Brush engine and live editing for common Photoshop-style operations
-- Native Android app with a mobile-first interface
-- Offline-first editing and local crash recovery
-- Arabic and RTL text shaping with imported font support
-- Clean-room engine built in Rust
+- Layer-based editing with layers, masks, adjustment layers, layer styles, type, vector shapes,
+  filters, brushes, erasers, crop, transforms, and export workflows
+- PSD compatibility and layered document support, plus Apelles project files with backward reading
+  support for legacy PhotoCraft `.pcraft` projects
+- Native Android app with a thumb-friendly bottom toolbar for Undo, Redo, Brush, Eraser, Text,
+  Crop, Filters, Layers, Export, and toolbar visibility controls
+- Reliable editing continuity: dirty-state tracking, autosave every 30 seconds, atomic metadata
+  writes, crash journal markers, three-generation dated snapshots, and manual project recovery
+- Integrated Undo/Redo and visible editing-history support
+- Touch workflows including pinch-to-zoom, touch-sized controls, gesture shortcuts, and a
+  conservative **UI Auto** mode that keeps visual controls aligned with their hit targets
+- Arabic and RTL text shaping, mixed Arabic/English text, bundled Noto Kufi Arabic support,
+  imported fonts, and Android keyboard/clipboard text handling
+- Android Storage Access Framework file opening and saving, secure FileProvider sharing, image and
+  text clipboard integration, and temporary-file cleanup
+- Offline-first operation: no Android `INTERNET` permission and no cloud processing of images
+- Pure Rust editing engine with GPU/CPU rendering paths and support for `arm64-v8a` and `x86_64`
 
 ## Privacy
 
