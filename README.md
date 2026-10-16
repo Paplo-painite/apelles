@@ -101,13 +101,23 @@ Arabic/RTL, or feature-specific feedback.
   imported fonts, and Android keyboard/clipboard text handling
 - Android Storage Access Framework file opening and saving, secure FileProvider sharing, image and
   text clipboard integration, and temporary-file cleanup
-- Offline-first operation: no Android `INTERNET` permission and no cloud processing of images
+- Offline-first operation: no image upload or cloud processing; network access is used only by the
+  optional once-per-day release-metadata check
 - Pure Rust editing engine with GPU/CPU rendering paths and support for `arm64-v8a` and `x86_64`
+
+### Optional update notifications
+
+Apelles checks the public GitHub Releases feed at most once per day when the app is opened. If a
+newer release exists, a clear in-app dialog shows its version number and release notes with
+**Update now** and **Later** actions. Nothing is downloaded or installed silently: **Update now**
+opens the public release or APK link in the Android browser/download manager. The checker is
+best-effort and never blocks offline editing. It reads release metadata only and never uploads
+images, projects, recovery data, or fonts.
 
 ## Privacy
 
-Apelles works offline and does not require the Android `INTERNET` permission. Images, projects,
-recovery data, and imported fonts remain on the device unless you explicitly export or share them.
+Apelles works offline. The Android `INTERNET` permission is used only for the optional GitHub release
+check described above; images, projects, recovery data, and imported fonts remain on the device.
 The APK does not upload your images to a remote service.
 
 ## Quick start

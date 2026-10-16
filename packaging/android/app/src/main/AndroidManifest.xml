@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Used only for the opt-in, once-per-day GitHub release check; no image data is uploaded. -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:icon="@mipmap/apelles_fox_icon"
         android:roundIcon="@mipmap/apelles_fox_icon"

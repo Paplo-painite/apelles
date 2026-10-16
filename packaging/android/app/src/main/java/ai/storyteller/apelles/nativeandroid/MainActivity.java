@@ -18,6 +18,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.widget.Toast;
+import android.app.AlertDialog;
+import android.graphics.Typeface;
+import android.text.TextUtils;
+import android.view.Gravity;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import androidx.core.graphics.Insets;
 import androidx.core.content.FileProvider;
@@ -30,6 +37,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,12 +59,18 @@ public final class MainActivity extends NativeActivity {
     private static final String IMPORT_PREFIX = "apelles-import-";
     private static final String CLIPBOARD_PREFIX = "apelles-clipboard-";
     private static final String SAVE_PREFIX = "apelles-save-";
+    private static final String UPDATE_PREFS = "apelles-updates";
+    private static final String UPDATE_CHECKED_AT = "checked_at";
+    private static final long UPDATE_CHECK_INTERVAL_MS = 24L * 60L * 60L * 1000L;
+    private static final String RELEASES_API = "https://api.github.com/repos/Paplo-painite/apelles/releases?per_page=10";
+    private static final String RELEASES_PAGE = "https://github.com/Paplo-painite/apelles/releases";
     private final Handler handler = new Handler(Looper.getMainLooper());
     private boolean pickerOpen = false;
     private boolean savePickerOpen = false;
     private boolean fontPickerOpen = false;
     private final Map<String, Uri> pendingSaveUris = new HashMap<>();
     private String lastClipboardKey = "";
+    private boolean updateCheckStarted = false;
     private final Runnable barStatePoller = new Runnable() {
         @Override public void run() {
             applySystemBars();
@@ -85,12 +104,14 @@ public final class MainActivity extends NativeActivity {
         cleanupTemporaryFiles();
         applySystemBars();
         handler.post(barStatePoller);
+        handler.postDelayed(this::checkForUpdatesIfDue, 1500L);
     }
 
     @Override protected void onResume() {
         super.onResume();
         handler.removeCallbacks(barStatePoller);
         handler.post(barStatePoller);
+        if (!updateCheckStarted) handler.postDelayed(this::checkForUpdatesIfDue, 1000L);
     }
 
     @Override protected void onPause() {
@@ -125,6 +146,148 @@ public final class MainActivity extends NativeActivity {
             attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
             window.setAttributes(attributes);
         }
+    }
+
+    /**
+     * Check for a newer GitHub Release at most once per day. The check never downloads or installs
+     * an APK: the user must press "تحديث الآن", which opens the release page/download in a browser.
+     */
+    private void checkForUpdatesIfDue() {
+        if (updateCheckStarted || isFinishing() || (Build.VERSION.SDK_INT >= 17 && isDestroyed())) return;
+        updateCheckStarted = true;
+        android.content.SharedPreferences preferences = getSharedPreferences(UPDATE_PREFS, MODE_PRIVATE);
+        long lastCheck = preferences.getLong(UPDATE_CHECKED_AT, 0L);
+        long now = System.currentTimeMillis();
+        if (now - lastCheck < UPDATE_CHECK_INTERVAL_MS) return;
+        preferences.edit().putLong(UPDATE_CHECKED_AT, now).apply();
+
+        new Thread(() -> {
+            try {
+                HttpURLConnection connection = (HttpURLConnection) new URL(RELEASES_API).openConnection();
+                connection.setConnectTimeout(5000);
+                connection.setReadTimeout(7000);
+                connection.setRequestProperty("Accept", "application/vnd.github+json");
+                connection.setRequestProperty("User-Agent", "Apelles-Android-Update-Checker");
+                String body;
+                try (InputStream input = connection.getInputStream(); java.io.ByteArrayOutputStream output = new java.io.ByteArrayOutputStream()) {
+                    byte[] buffer = new byte[8192];
+                    int count;
+                    int total = 0;
+                    while ((count = input.read(buffer)) != -1 && total < 2 * 1024 * 1024) {
+                        output.write(buffer, 0, count);
+                        total += count;
+                    }
+                    body = output.toString(StandardCharsets.UTF_8.name());
+                } finally {
+                    connection.disconnect();
+                }
+                JSONObject release = newestRelease(new JSONArray(body));
+                if (release == null) return;
+                String remoteTag = release.optString("tag_name", "");
+                if (!isNewerVersion(remoteTag, currentVersionName())) return;
+                String notes = release.optString("body", "").trim();
+                String pageUrl = release.optString("html_url", RELEASES_PAGE);
+                String apkUrl = apkAssetUrl(release);
+                handler.post(() -> showUpdateDialog(remoteTag, notes, pageUrl, apkUrl));
+            } catch (Exception ignored) {
+                // Update checks are best-effort and must never affect offline editing.
+            }
+        }, "apelles-update-check").start();
+    }
+
+    private JSONObject newestRelease(JSONArray releases) {
+        JSONObject best = null;
+        for (int i = 0; i < releases.length(); i++) {
+            JSONObject candidate = releases.optJSONObject(i);
+            if (candidate == null || candidate.optBoolean("draft", false)) continue;
+            String tag = candidate.optString("tag_name", "");
+            if (!tag.startsWith("v") || !isNewerVersion(tag, best == null ? "0.0.0" : best.optString("tag_name", "0.0.0"))) continue;
+            best = candidate;
+        }
+        return best;
+    }
+
+    private String apkAssetUrl(JSONObject release) {
+        JSONArray assets = release.optJSONArray("assets");
+        if (assets != null) {
+            for (int i = 0; i < assets.length(); i++) {
+                JSONObject asset = assets.optJSONObject(i);
+                if (asset != null && asset.optString("name", "").toLowerCase(Locale.ROOT).endsWith(".apk")) {
+                    return asset.optString("browser_download_url", "");
+                }
+            }
+        }
+        return "";
+    }
+
+    private String currentVersionName() {
+        try {
+            return getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (Exception ignored) {
+            return "0.0.0";
+        }
+    }
+
+    private boolean isNewerVersion(String remote, String local) {
+        int[] r = versionParts(remote);
+        int[] l = versionParts(local);
+        for (int i = 0; i < 3; i++) {
+            if (r[i] != l[i]) return r[i] > l[i];
+        }
+        return false;
+    }
+
+    private int[] versionParts(String value) {
+        int[] result = new int[]{0, 0, 0};
+        if (value == null) return result;
+        String clean = value.replaceFirst("^[vV]", "").split("[-+]")[0];
+        String[] parts = clean.split("\\.");
+        for (int i = 0; i < Math.min(parts.length, 3); i++) {
+            try { result[i] = Integer.parseInt(parts[i]); } catch (NumberFormatException ignored) { return new int[]{0, 0, 0}; }
+        }
+        return result;
+    }
+
+    private void showUpdateDialog(String tag, String notes, String pageUrl, String apkUrl) {
+        if (isFinishing() || (Build.VERSION.SDK_INT >= 17 && isDestroyed())) return;
+        LinearLayout content = new LinearLayout(this);
+        content.setOrientation(LinearLayout.VERTICAL);
+        content.setPadding(48, 8, 48, 0);
+
+        TextView summary = new TextView(this);
+        summary.setText("يتوفر إصدار جديد من Apelles\n\nالإصدار الجديد: " + tag + "\n\nإصلاحات وتحسينات:");
+        summary.setTextSize(17f);
+        summary.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        summary.setGravity(Gravity.RIGHT);
+        content.addView(summary);
+
+        TextView details = new TextView(this);
+        details.setText(TextUtils.isEmpty(notes) ? "راجع صفحة الإصدار لمعرفة التفاصيل." : notes);
+        details.setTextSize(15f);
+        details.setGravity(Gravity.RIGHT);
+        details.setPadding(0, 18, 0, 12);
+        ScrollView scroll = new ScrollView(this);
+        scroll.addView(details);
+        content.addView(scroll, new LinearLayout.LayoutParams(-1, 360));
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("تحديث متاح")
+                .setView(content)
+                .setNegativeButton("لاحقًا", null)
+                .setPositiveButton("تحديث الآن", null)
+                .create();
+        dialog.setOnShowListener(ignored -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view -> {
+            String target = TextUtils.isEmpty(apkUrl) ? pageUrl : apkUrl;
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(target));
+                if (!TextUtils.isEmpty(apkUrl)) intent.setType("application/vnd.android.package-archive");
+                startActivity(intent);
+            } catch (Exception error) {
+                try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(pageUrl))); } catch (Exception ignoredAgain) { }
+            }
+            dialog.dismiss();
+        }));
+        dialog.show();
     }
 
     private void installInsetsListener() {
