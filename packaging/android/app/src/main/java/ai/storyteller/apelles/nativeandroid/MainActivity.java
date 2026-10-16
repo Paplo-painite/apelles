@@ -277,13 +277,16 @@ public final class MainActivity extends NativeActivity {
                 .setPositiveButton("تحديث الآن", null)
                 .create();
         dialog.setOnShowListener(ignored -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view -> {
-            String target = TextUtils.isEmpty(apkUrl) ? pageUrl : apkUrl;
+            // Open the release page instead of sending a remote APK directly to an installer.
+            // Some OxygenOS installers receive a content:// URI without a read grant and report
+            // "has no access to content://media/external/downloads/...". The page flow lets the
+            // browser/download manager save the APK, after which Android Files can install it.
             try {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(target));
-                if (!TextUtils.isEmpty(apkUrl)) intent.setType("application/vnd.android.package-archive");
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(pageUrl));
+                intent.addCategory(Intent.CATEGORY_BROWSABLE);
                 startActivity(intent);
             } catch (Exception error) {
-                try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(pageUrl))); } catch (Exception ignoredAgain) { }
+                try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(RELEASES_PAGE))); } catch (Exception ignoredAgain) { }
             }
             dialog.dismiss();
         }));
