@@ -286,11 +286,10 @@ fn android_fit_scale(native: f32, physical: egui::Vec2) -> f32 {
     let long = physical.x.max(physical.y);
     let short = physical.x.min(physical.y);
     let fit = (long / 1280.0).min(short / 600.0);
-    // A phone's physical resolution can suggest a very large desktop-like scale. That makes
-    // the side docks overlap the canvas and, more importantly, changes the visual scale while a
-    // touch event is being processed. Auto must remain conservative; users can still choose a
-    // larger fixed scale explicitly on tablets and desktop-sized Android devices.
-    native.min(fit).clamp(1.0, 1.25)
+    // Fit the desktop layout to the physical display. The touch-target minimum is enforced
+    // separately below, so Auto must not use an arbitrary 125% cap that leaves phone docks too
+    // large and compresses the canvas into a narrow strip.
+    native.min(fit).clamp(1.0, 3.0)
 }
 
 #[cfg(target_os = "android")]
@@ -2317,10 +2316,11 @@ mod tests {
 
     #[test]
     fn android_fit_scale_targets_a_desktop_sized_logical_viewport() {
-        assert_eq!(android_fit_scale(3.0, vec2(2576.0, 1171.0)), 1.25, "Auto stays conservative on Android");
-        assert_eq!(android_fit_scale(3.0, vec2(1171.0, 2576.0)), 1.25, "portrait uses the same conservative fit");
+        let expected_phone_fit = (2576.0_f32 / 1280.0).min(1171.0 / 600.0);
+        assert_eq!(android_fit_scale(3.0, vec2(2576.0, 1171.0)), expected_phone_fit, "landscape fits the desktop-sized logical viewport");
+        assert_eq!(android_fit_scale(3.0, vec2(1171.0, 2576.0)), expected_phone_fit, "portrait uses the same physical fit");
         assert_eq!(android_fit_scale(0.5, vec2(2576.0, 1171.0)), 1.0, "never make touch UI smaller than 1 ppp");
-        assert_eq!(android_fit_scale(4.0, vec2(10000.0, 8000.0)), 1.25, "cap extreme native DPI");
+        assert_eq!(android_fit_scale(4.0, vec2(10000.0, 8000.0)), 3.0, "cap extreme native DPI");
     }
 
     #[test]
