@@ -48,6 +48,13 @@ pub struct Runtime {
     pub(crate) checker_key: Option<[[u8; 3]; 2]>,
     /// Style last sent to the GPU canvas.
     pub(crate) gpu_style: Option<crate::gpu_canvas::CanvasStyle>,
+    /// Last stable Android Auto scale. Keeping this in runtime state prevents the viewport
+    /// transform from being rewritten on every frame while Android is reporting the same size.
+    #[cfg(target_os = "android")]
+    android_auto_scale: Option<f32>,
+    /// Physical monitor size used for the cached Android Auto scale.
+    #[cfg(target_os = "android")]
+    android_auto_physical_size: Option<egui::Vec2>,
 }
 
 /// The GPU canvas colours from Preferences › Transparency & Gamut.
@@ -299,7 +306,7 @@ fn android_physical_size(ctx: &egui::Context, native: f32) -> Option<egui::Vec2>
     ctx.input(|i| i.viewport().monitor_size).filter(|s| s.x.is_finite() && s.y.is_finite() && s.x > 0.0 && s.y > 0.0).map(|s| s * native)
 }
 
-fn sync_display_scale(app: &ApellesApp, ctx: &egui::Context) {
+fn sync_display_scale(app: &mut ApellesApp, ctx: &egui::Context) {
     let native = ctx.native_pixels_per_point();
     // ViewportInfo uses egui points, including the current UI zoom. Converting back to
     // physical pixels avoids oscillating between 100% and 200% on successive frames.
@@ -307,7 +314,20 @@ fn sync_display_scale(app: &ApellesApp, ctx: &egui::Context) {
     let native_scale = native.filter(|v| v.is_finite() && *v > 0.0).unwrap_or(1.0);
     #[cfg(target_os = "android")]
     {
-        let auto = android_physical_size(ctx, native_scale).map(|physical| android_fit_scale(native_scale, physical)).unwrap_or(native_scale.clamp(1.0, 3.0));
+        let physical = android_physical_size(ctx, native_scale);
+        let auto = if let Some(physical) = physical {
+            let size_changed = app.prefs_rt.android_auto_physical_size.map_or(true, |last| (last - physical).abs().max_elem() > 1.0);
+            if size_changed || app.prefs_rt.android_auto_scale.is_none() {
+                let scale = android_fit_scale(native_scale, physical);
+                app.prefs_rt.android_auto_physical_size = Some(physical);
+                app.prefs_rt.android_auto_scale = Some(scale);
+                scale
+            } else {
+                app.prefs_rt.android_auto_scale.unwrap_or_else(|| android_fit_scale(native_scale, physical))
+            }
+        } else {
+            native_scale.clamp(1.0, 3.0)
+        };
         let scale = match app.session.prefs().interface.ui_scale {
             prefs::UiScale::Auto => auto,
             fixed => fixed.name().parse::<f32>().map_or(auto, |pct| (pct / 100.0).clamp(1.0, 3.0)),
@@ -320,7 +340,9 @@ fn sync_display_scale(app: &ApellesApp, ctx: &egui::Context) {
             ctx.request_repaint();
             return;
         }
-        ctx.set_pixels_per_point(scale);
+        if (ctx.pixels_per_point() - scale).abs() > 0.001 {
+            ctx.set_pixels_per_point(scale);
+        }
         // Keep controls finger-sized in physical pixels after the ppp change.
         let min_touch = 40.0 / scale;
         ctx.global_style_mut(|style| {
